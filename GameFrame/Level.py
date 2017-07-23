@@ -24,6 +24,10 @@ class Level:
         while self.running:
             self.__clock.tick(Globals.FRAMES_PER_SECOND)
 
+            for obj in self.objects:
+                obj.prev_x = obj.x
+                obj.prev_y = obj.y
+
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:
@@ -54,11 +58,13 @@ class Level:
             for item in self.objects:
                 item.update()
                 item.step()
-                self.__screen.blit(item.image, (item.x, item.y))
 
             # Check collisions
             for item in self.objects:
                 item.check_collisions()
+
+            for item in self.objects:
+                self.__screen.blit(item.image, (item.x, item.y))
 
             pygame.display.update()
 
@@ -74,9 +80,10 @@ class Level:
             self.objects.append(room_object)
         else:
             for index, item in enumerate(self.objects):
-                if item.depth <= room_object.depth or index == len(self.objects):
+                if item.depth >= room_object.depth or index == len(self.objects) - 1:
                     self.objects.insert(index, room_object)
                     break
+
         # - Add objects that handle key events to array - #
         if room_object.handle_key_events:
             self.keyboard_objects.append(room_object)

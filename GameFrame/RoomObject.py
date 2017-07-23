@@ -6,6 +6,8 @@ class RoomObject:
         self.depth = 0
         self.x = x
         self.y = y
+        self.prev_x = x
+        self.prev_y = y
         self.width = 0
         self.height = 0
         self.image = 0
@@ -65,3 +67,8 @@ class RoomObject:
         # self is above or below other
         if other.rect.left < self.rect.centerx < other.rect.right:
             self.y_speed *= -1
+
+    def blocked(self):
+
+        self.x = self.prev_x
+        self.y = self.prev_y

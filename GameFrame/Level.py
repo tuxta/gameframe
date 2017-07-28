@@ -14,6 +14,7 @@ class Level:
         self.quitting = False
         self.background_set = False
         self.background_image = 0
+        self.user_events = []
 
     def run(self):
         # set the collision detection list
@@ -27,6 +28,9 @@ class Level:
             for obj in self.objects:
                 obj.prev_x = obj.x
                 obj.prev_y = obj.y
+
+            # - Process user events - #
+            self.process_user_events()
 
             events = pygame.event.get()
             for event in events:
@@ -118,3 +122,13 @@ class Level:
                 self.objects.pop(index)
             else:
                 list_obj.remove_object(obj)
+
+    def set_timer(self, ticks, function_call):
+        self.user_events.append([ticks, function_call])
+
+    def process_user_events(self):
+        for index, user_event in enumerate(self.user_events):
+            user_event[0] -= 1
+            if user_event[0] <= 0:
+                user_event[1]()
+                self.user_events.pop(index)

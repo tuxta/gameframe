@@ -1,20 +1,34 @@
+#!/usr/bin/python3
+
 import sys
+
 import pygame
-from Rooms import * 
+
 from GameFrame import Globals
+from Rooms import *
 
 pygame.init()
+pygame.font.init()
 pygame.display.set_caption("My Awesome Game")
 window_size = (Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT)
 screen = pygame.display.set_mode(window_size,
                                  pygame.DOUBLEBUF, 32)
 
 # - Track current level - #
-start_screen, level_1, level_2, end_screen, game_over = 0, 1, 2, 3, 4
+start_screen, level_1, level_2, level_3, end_screen, game_over = 0, 1, 2, 3, 4, 5
 curr_level = start_screen
 
 # - Set the starting number of lives - #
 Globals.LIVES = 3
+
+
+def run_level(room):
+    print('here')
+    exit_val = room.run()
+    if exit_val is True or Globals.running is False:
+        global curr_level
+        global end_screen
+        curr_level = end_screen
 
 """
   This loop controls progression through the levels.
@@ -23,21 +37,27 @@ Globals.LIVES = 3
    repeat visit for instance)
 """
 while Globals.running:
+
     if curr_level == start_screen:
         curr_level = level_1
+        run_level(ScrollingShooter(screen))
+
     elif curr_level == level_1:
-        room = Room1(screen)
-        exit_val = room.run()
-        if exit_val is True or Globals.running is False:
-            curr_level = end_screen
-        else:
-            curr_level = level_2
+        curr_level = level_2
+        run_level(Maze(screen))
+
     elif curr_level == level_2:
-        room = Room2(screen)
-        room.run()
+        curr_level = level_3
+        run_level(BreakOutL1(screen))
+
+    elif curr_level == level_3:
         curr_level = end_screen
+        run_level(BreakOutL2(screen))
+
     elif curr_level == end_screen:
         curr_level = game_over
+
     else:
         Globals.running = False
+
 sys.exit()

@@ -14,6 +14,9 @@ class Level:
         self.quitting = False
         self.background_set = False
         self.background_image = 0
+        self.background_y = 0
+        self.background_scroll_speed = 0
+        self.background_scrolling = False
         self.user_events = []
 
     def run(self):
@@ -57,7 +60,15 @@ class Level:
             self.__screen.fill((0, 0, 0))
             # - Add Background if set - #
             if self.background_set:
-                self.__screen.blit(self.background_image, (0, 0))
+                # - Scrolling if set - #
+                if self.background_scrolling:
+                    self.background_y += self.background_scroll_speed
+                    if self.background_y >= Globals.SCREEN_HEIGHT:
+                        self.background_y = 0
+                    self.__screen.blit(self.background_image, (0, self.background_y))
+                    self.__screen.blit(self.background_image, (0, self.background_y - 600))
+                else:
+                    self.__screen.blit(self.background_image, (0, 0))
             # Call Update on all objects
             for item in self.objects:
                 item.update()
@@ -77,6 +88,10 @@ class Level:
     def set_background_image(self, image_path):
         self.background_set = True
         self.background_image = image_path
+
+    def set_background_scroll(self, speed):
+        self.background_scrolling = True
+        self.background_scroll_speed = speed
 
     def add_room_object(self, room_object):
         # - Add to room objects - #

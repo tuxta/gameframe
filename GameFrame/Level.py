@@ -5,11 +5,11 @@ from GameFrame.Globals import Globals
 class Level:
 
     def __init__(self, screen):
-        self.__screen = screen
+        self.screen = screen
         self.objects = []
         self.keyboard_objects = []
         self.mouse_objects = []
-        self.__clock = pygame.time.Clock()
+        self._clock = pygame.time.Clock()
         self.running = True
         self.quitting = False
         self.background_set = False
@@ -26,7 +26,7 @@ class Level:
             self.init_collision_list(room_object)
 
         while self.running:
-            self.__clock.tick(Globals.FRAMES_PER_SECOND)
+            self._clock.tick(Globals.FRAMES_PER_SECOND)
 
             for obj in self.objects:
                 obj.prev_x = obj.x
@@ -57,7 +57,7 @@ class Level:
             self.catch_events(events)
 
             # - Clear the screen - #
-            self.__screen.fill((0, 0, 0))
+            self.screen.fill((0, 0, 0))
             # - Add Background if set - #
             if self.background_set:
                 # - Scrolling if set - #
@@ -65,10 +65,10 @@ class Level:
                     self.background_y += self.background_scroll_speed
                     if self.background_y >= Globals.SCREEN_HEIGHT:
                         self.background_y = 0
-                    self.__screen.blit(self.background_image, (0, self.background_y))
-                    self.__screen.blit(self.background_image, (0, self.background_y - 600))
+                    self.screen.blit(self.background_image, (0, self.background_y))
+                    self.screen.blit(self.background_image, (0, self.background_y - 600))
                 else:
-                    self.__screen.blit(self.background_image, (0, 0))
+                    self.screen.blit(self.background_image, (0, 0))
             # Call Update on all objects
             for item in self.objects:
                 item.update()
@@ -79,7 +79,7 @@ class Level:
                 item.check_collisions()
 
             for item in self.objects:
-                self.__screen.blit(item.image, (item.x, item.y))
+                self.screen.blit(item.image, (item.x, item.y))
 
             pygame.display.update()
 
@@ -94,14 +94,16 @@ class Level:
         self.background_scroll_speed = speed
 
     def add_room_object(self, room_object):
-        # - Add to room objects - #
+        # - Add to room objects list - #
         if len(self.objects) == 0:
             self.objects.append(room_object)
         else:
             for index, item in enumerate(self.objects):
-                if item.depth >= room_object.depth or index == len(self.objects) - 1:
+                if item.depth >= room_object.depth:
                     self.objects.insert(index, room_object)
                     break
+                if index == len(self.objects) - 1:
+                    self.objects.append(room_object)
 
         # - Add objects that handle key events to array - #
         if room_object.handle_key_events:
@@ -110,6 +112,12 @@ class Level:
         # - Add objects that handle mouse events to array - #
         if room_object.handle_mouse_events:
             self.mouse_objects.append(room_object)
+
+    def add_room_object_dynamic(self, room_object):
+        # - Add to room objects when level already running - #
+        self.add_room_object(room_object)
+        for obj in self.objects:
+            self.init_collision_list(obj)
 
     def init_collision_list(self, room_object):
         # - Initialise collision list for object - #
@@ -130,13 +138,9 @@ class Level:
         for index, list_obj in enumerate(self.keyboard_objects):
             if list_obj is obj:
                 self.objects.pop(index)
-            else:
-                list_obj.remove_object(obj)
         for index, list_obj in enumerate(self.mouse_objects):
             if list_obj is obj:
                 self.objects.pop(index)
-            else:
-                list_obj.remove_object(obj)
 
     def set_timer(self, ticks, function_call):
         self.user_events.append([ticks, function_call])

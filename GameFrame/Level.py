@@ -40,6 +40,7 @@ class Level:
                 if event.type == pygame.QUIT:
                     self.running = False
                     self.quitting = True
+                    pass
             # - Check for a keyboard event and pass - #
             # - to objects registered for key events - #
             keys = pygame.key.get_pressed()
@@ -118,6 +119,9 @@ class Level:
         self.add_room_object(room_object)
         for obj in self.objects:
             self.init_collision_list(obj)
+
+    def load_sound(self, sound_file):
+        return pygame.mixer.Sound(sound_file)
 
     def init_collision_list(self, room_object):
         # - Initialise collision list for object - #

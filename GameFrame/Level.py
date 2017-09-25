@@ -20,11 +20,6 @@ class Level:
         self.user_events = []
 
     def run(self):
-        # set the collision detection list
-        # for each object in the room
-        for room_object in self.objects:
-            self.init_collision_list(room_object)
-
         while self.running:
             self._clock.tick(Globals.FRAMES_PER_SECOND)
 
@@ -114,9 +109,6 @@ class Level:
         if room_object.handle_mouse_events:
             self.mouse_objects.append(room_object)
 
-    def add_room_object_dynamic(self, room_object):
-        # - Add to room objects when level already running - #
-        self.add_room_object(room_object)
         for obj in self.objects:
             self.init_collision_list(obj)
 

@@ -1,3 +1,5 @@
+import math
+
 
 class RoomObject:
 
@@ -72,3 +74,37 @@ class RoomObject:
 
         self.x = self.prev_x
         self.y = self.prev_y
+
+    def set_direction(self, angle, speed):
+        if angle < 0:
+            pass
+        elif angle == 0:
+            self.x_speed = speed
+            self.y_speed = 0
+        elif angle < 90:
+            self.x_speed, self.y_speed = self._get_direction(angle, speed)
+        elif angle == 90:
+            self.x_speed = 0
+            self.y_speed = speed
+        elif angle < 180:
+            self.x_speed, self.y_speed = self._get_direction(angle - 90, speed)
+            self.x_speed, self.y_speed = -self.y_speed, self.x_speed
+        elif angle == 180:
+            self.x_speed = -speed
+            self.y_speed = 0
+        elif angle < 270:
+            self.x_speed, self.y_speed = self._get_direction(angle - 180, speed)
+            self.x_speed, self.y_speed = -self.x_speed, -self.y_speed
+        elif angle == 270:
+            self.x_speed = 0
+            self.y_speed = -speed
+        elif angle < 360:
+            self.x_speed, self.y_speed = self._get_direction(angle - 270, speed)
+            self.x_speed, self.y_speed = self.y_speed, -self.x_speed
+
+    def _get_direction(self, angle, speed):
+        # Use Trigonometry to calculate x_speed and y_speed values
+        new_x_speed = math.cos(math.radians(angle)) * speed
+        new_y_speed = math.sin(math.radians(angle)) * speed
+
+        return round(new_x_speed), round(new_y_speed)

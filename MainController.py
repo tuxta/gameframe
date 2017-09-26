@@ -7,6 +7,8 @@ import pygame
 from GameFrame import Globals
 from Rooms import *
 
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 pygame.init()
 pygame.font.init()
 pygame.display.set_caption("My Awesome Game")
@@ -35,29 +37,29 @@ def run_level(room):
     exit_val = room.run()
     if exit_val is True or Globals.running is False:
         global curr_level
-        global end_screen
-        curr_level = end_screen
+        global game_over
+        curr_level = game_over
 
 while Globals.running:
 
     if curr_level == start_screen:
         curr_level = level_1
-        run_level(ScrollingShooter(screen))
+        run_level(WelcomeScreen(screen))
 
     elif curr_level == level_1:
         curr_level = level_2
-        run_level(Maze(screen))
+        run_level(ScrollingShooter(screen))
 
     elif curr_level == level_2:
         curr_level = level_3
-        run_level(BreakOutL1(screen))
+        run_level(Maze(screen))
 
     elif curr_level == level_3:
         curr_level = end_screen
-        run_level(BreakOutL2(screen))
+        run_level(BreakOut(screen))
 
     elif curr_level == end_screen:
-        curr_level = game_over
+        curr_level = start_screen
 
     else:
         Globals.running = False

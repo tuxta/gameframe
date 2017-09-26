@@ -10,7 +10,7 @@ class Level:
         self.keyboard_objects = []
         self.mouse_objects = []
         self._clock = pygame.time.Clock()
-        self.running = True
+        self.running = False
         self.quitting = False
         self.background_set = False
         self.background_image = 0
@@ -20,6 +20,10 @@ class Level:
         self.user_events = []
 
     def run(self):
+        self.running = True
+        for obj in self.objects:
+            self.init_collision_list(obj)
+
         while self.running:
             self._clock.tick(Globals.FRAMES_PER_SECOND)
 
@@ -109,8 +113,9 @@ class Level:
         if room_object.handle_mouse_events:
             self.mouse_objects.append(room_object)
 
-        for obj in self.objects:
-            self.init_collision_list(obj)
+        if self.running:
+            for obj in self.objects:
+                self.init_collision_list(obj)
 
     def load_sound(self, sound_file):
         return pygame.mixer.Sound(sound_file)

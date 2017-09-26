@@ -51,6 +51,16 @@ class RoomObject:
             if self.rect.colliderect(item.rect):
                 self.handle_collision(item)
 
+    def collides_at(self, obj, x, y, collision_type):
+        check_rect = obj.rect.move(x, y)
+        collision_found = False
+        for item in self.collision_objects:
+            if check_rect.colliderect(item.rect):
+                if type(item).__name__ == collision_type:
+                    collision_found = True
+                    break
+        return collision_found
+
     def handle_collision(self, other):
         pass
 

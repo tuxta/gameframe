@@ -84,6 +84,8 @@ class RoomObject:
 
         self.x = self.prev_x
         self.y = self.prev_y
+        self.x_speed = 0
+        self.y_speed = 0
 
     def set_direction(self, angle, speed):
         if angle < 0:

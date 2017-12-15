@@ -1,3 +1,4 @@
+import os
 import pygame
 from GameFrame.Globals import Globals
 
@@ -40,6 +41,13 @@ class Level:
                     self.running = False
                     self.quitting = True
                     pass
+                # - Check for mouse click and pass to objects registered for mouse events - #
+                if event.type == pygame.MOUSEBUTTONUP:
+                    mouse_pos = pygame.mouse.get_pos()
+                    for obj in self.mouse_objects:
+                        if obj.rect.collidepoint(mouse_pos):
+                            obj.clicked(event.button)
+
             # - Check for a keyboard event and pass - #
             # - to objects registered for key events - #
             keys = pygame.key.get_pressed()
@@ -53,6 +61,7 @@ class Level:
             (button_left, button_middle, button_right) = pygame.mouse.get_pressed()
             for obj in self.mouse_objects:
                     obj.mouse_event(mouse_x, mouse_y, button_left, button_middle, button_right)
+
             # - Handle all other events - #
             self.catch_events(events)
 
@@ -85,9 +94,9 @@ class Level:
 
         return self.quitting
 
-    def set_background_image(self, image_path):
+    def set_background_image(self, image_file):
         self.background_set = True
-        self.background_image = image_path
+        self.background_image = pygame.image.load(os.path.join('Images', image_file))
 
     def set_background_scroll(self, speed):
         self.background_scrolling = True
@@ -141,7 +150,7 @@ class Level:
                 self.objects.pop(index)
         for index, list_obj in enumerate(self.mouse_objects):
             if list_obj is obj:
-                self.objects.pop(index)
+                self.mouse_objects.pop(index)
 
     def set_timer(self, ticks, function_call):
         self.user_events.append([ticks, function_call])

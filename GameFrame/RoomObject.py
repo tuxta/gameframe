@@ -8,6 +8,7 @@ class RoomObject:
         self.depth = 0
         self.x = x
         self.y = y
+        self.rect = 0
         self.prev_x = x
         self.prev_y = y
         self.width = 0
@@ -65,6 +66,9 @@ class RoomObject:
         pass
 
     def key_pressed(self, key):
+        pass
+
+    def clicked(self, button_number):
         pass
 
     def mouse_event(self, mouse_x, mouse_y, button_left, button_middle, button_right):

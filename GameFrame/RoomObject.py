@@ -1,4 +1,6 @@
 import math
+import os
+import pygame
 
 
 class RoomObject:
@@ -23,8 +25,14 @@ class RoomObject:
         self.collision_object_types = set()
         self.collision_objects = []
 
-    def set_image(self, image):
-        self.image = image
+    def load_image(self, file_name):
+        return os.path.join('Images', file_name)
+
+    def set_image(self, image, width, height):
+        self.image = pygame.image.load(image)
+        self.width = width
+        self.height = height
+        self.rect = pygame.Rect(self.x, self.y, width, height)
 
     def register_collision_object(self, collision_object):
         self.collision_object_types.add(collision_object)
@@ -79,10 +87,12 @@ class RoomObject:
         # self is to the side of other
         if other.rect.top < self.rect.centery < other.rect.bottom:
             self.x_speed *= -1
+            self.x = self.prev_x
 
         # self is above or below other
         if other.rect.left < self.rect.centerx < other.rect.right:
             self.y_speed *= -1
+            self.y = self.prev_y
 
     def blocked(self):
 

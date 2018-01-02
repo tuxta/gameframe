@@ -127,7 +127,8 @@ class Level:
                 self.init_collision_list(obj)
 
     def load_sound(self, sound_file):
-        return pygame.mixer.Sound(sound_file)
+        fq_filename = os.path.join('Sounds', sound_file)
+        return pygame.mixer.Sound(fq_filename)
 
     def init_collision_list(self, room_object):
         # - Initialise collision list for object - #

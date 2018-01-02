@@ -1,37 +1,11 @@
 ## Welcome to GitHub Pages
 
-You can use the [editor on GitHub](https://github.com/tuxta/gameframe/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+GameFrame has been developed to take the excellent PyGame libraries and make them more accessible and easy to use for beginner to intermediate programmers. GameFrame aims to help with learning the concepts of text based game programming without getting caught up in the implementation details.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+GameFrame is set up as an event driven framework. Programmers define Rooms and Room Objects, then write functions to handle certain events such as collisions, button clicks and so on. Just define all the items of your game, then let it run. GameFrame handles the Game loop and collision detection, just register your object for an event and write the code that will run when that event occurs.
 
-### Markdown
+GameFrame was primarily written for education, however it can be used to make a variety of games that can be can be freely shared, altered and improved. It’s free and available for everyone to use, students, hobbyist and accomplished programmers alike.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/tuxta/gameframe/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+[Download_GameFrame](https://github.com/tuxta/gameframe/archive/master.zip)

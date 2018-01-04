@@ -101,6 +101,9 @@ class RoomObject:
         self.x_speed = 0
         self.y_speed = 0
 
+    def set_timer(self, ticks, function_call):
+        self.room.set_timer(ticks, function_call)
+
     def set_direction(self, angle, speed):
         if angle < 0:
             pass

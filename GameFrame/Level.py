@@ -40,6 +40,7 @@ class Level:
                 if event.type == pygame.QUIT:
                     self.running = False
                     self.quitting = True
+                    Globals.exiting = True
                     pass
                 # - Check for mouse click and pass to objects registered for mouse events - #
                 if event.type == pygame.MOUSEBUTTONUP:
@@ -129,6 +130,9 @@ class Level:
     def load_sound(self, sound_file):
         fq_filename = os.path.join('Sounds', sound_file)
         return pygame.mixer.Sound(fq_filename)
+
+    def load_image(self, file_name):
+        return os.path.join('Images', file_name)
 
     def init_collision_list(self, room_object):
         # - Initialise collision list for object - #

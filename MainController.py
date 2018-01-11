@@ -36,4 +36,7 @@ while Globals.running:
         if len(levels) == 1:
             break
 
+    if Globals.exiting:
+        break
+
 sys.exit()

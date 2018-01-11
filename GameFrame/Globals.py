@@ -24,6 +24,9 @@ class Globals:
     # - Set this number to the level you want to jump to when the game ends - #
     end_game_level = 4
 
+    # - Change variable to True to exit the program - #
+    exiting = False
+
 
 # ############################################################# #
 # ###### User Defined Global Variables below this line ######## #

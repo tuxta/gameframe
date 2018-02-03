@@ -112,8 +112,9 @@ class Level:
                 if item.depth >= room_object.depth:
                     self.objects.insert(index, room_object)
                     break
-                if index == len(self.objects) - 1:
+                elif index == len(self.objects) - 1:
                     self.objects.append(room_object)
+                    break
 
         # - Add objects that handle key events to array - #
         if room_object.handle_key_events:

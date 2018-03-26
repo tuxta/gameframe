@@ -32,6 +32,7 @@ class RoomObject:
         self.image = pygame.image.load(image).convert_alpha()
         self.width = width
         self.height = height
+        self.image = pygame.transform.scale(self.image, (width, height))
         self.rect = pygame.Rect(self.x, self.y, width, height)
 
     def register_collision_object(self, collision_object):

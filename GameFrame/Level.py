@@ -97,7 +97,7 @@ class Level:
 
     def set_background_image(self, image_file):
         self.background_set = True
-        self.background_image = pygame.image.load(os.path.join('Images', image_file))
+        self.background_image = pygame.image.load(os.path.join('Images', image_file)).convert_alpha()
 
     def set_background_scroll(self, speed):
         self.background_scrolling = True

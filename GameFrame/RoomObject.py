@@ -29,7 +29,7 @@ class RoomObject:
         return os.path.join('Images', file_name)
 
     def set_image(self, image, width, height):
-        self.image = pygame.image.load(image)
+        self.image = pygame.image.load(image).convert_alpha()
         self.width = width
         self.height = height
         self.rect = pygame.Rect(self.x, self.y, width, height)

@@ -157,6 +157,11 @@ class Level:
         for index, list_obj in enumerate(self.mouse_objects):
             if list_obj is obj:
                 self.mouse_objects.pop(index)
+        # Remove any timed function calls for the deleted object
+        for index, event_method in enumerate(self.user_events):
+            obj_inst = event_method[1].__self__
+            if obj_inst is obj:
+                self.user_events.pop(index)
 
     def set_timer(self, ticks, function_call):
         self.user_events.append([ticks, function_call])

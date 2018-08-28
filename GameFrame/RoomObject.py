@@ -2,7 +2,6 @@ import math
 import os
 import pygame
 
-
 class RoomObject:
 
     def __init__(self, room, x, y):
@@ -16,11 +15,15 @@ class RoomObject:
         self.width = 0
         self.height = 0
         self.image = 0
+        self.image_orig = 0
+        self.curr_rotation = 0
         self.x_speed = 0
         self.y_speed = 0
         self.gravity = 0
         self.handle_key_events = False
         self.handle_mouse_events = False
+        self.angle = 0
+
 
         self.collision_object_types = set()
         self.collision_objects = []
@@ -29,10 +32,11 @@ class RoomObject:
         return os.path.join('Images', file_name)
 
     def set_image(self, image, width, height):
-        self.image = pygame.image.load(image).convert_alpha()
+        self.image_orig = pygame.image.load(image).convert_alpha()
+        self.image_orig = pygame.transform.scale(self.image_orig, (width, height))
         self.width = width
         self.height = height
-        self.image = pygame.transform.scale(self.image, (width, height))
+        self.image = self.image_orig.copy()
         self.rect = pygame.Rect(self.x, self.y, width, height)
 
     def register_collision_object(self, collision_object):
@@ -138,3 +142,28 @@ class RoomObject:
         new_y_speed = math.sin(math.radians(angle)) * speed
 
         return round(new_x_speed), round(new_y_speed)
+
+    def rotate(self, angle):
+        self.curr_rotation = self.angle = angle + self.curr_rotation
+        self.image = pygame.transform.rotate(self.image_orig, self.angle)
+
+        x, y = self.rect.center
+
+        self.rect = self.image.get_rect()
+
+        self.x = x - int((self.rect.width / 2))
+        self.y = y - int((self.rect.height / 2))
+
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def rotate_to_coordinate(self, x, y):
+
+        distance_x = self.x + (self.width / 2) - x
+        distance_y = self.y + (self.height / 2) - y
+
+        angle = math.degrees(math.atan2(distance_x, distance_y))
+
+        self.curr_rotation = 0
+
+        self.rotate(angle)

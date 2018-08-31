@@ -143,8 +143,48 @@ class RoomObject:
 
         return round(new_x_speed), round(new_y_speed)
 
+    def get_direction_coordinates(self, angle, speed):
+
+        angle += 90
+        if angle >= 360:
+            angle = angle - 360
+
+        if angle == 0:
+            x = speed
+            y = 0
+        elif angle < 90:
+            x, y = self._get_direction(angle + 90, speed)
+            x, y = y, x
+        elif angle == 90:
+            x = 0
+            y = -speed
+        elif angle < 180:
+            x, y = self._get_direction(angle, speed)
+            y *= -1
+        elif angle == 180:
+            x = -speed
+            y = 0
+        elif angle < 270:
+            x, y = self._get_direction(angle - 90, speed)
+            y, x = -x, -y
+        elif angle == 270:
+            x = 0
+            y = speed
+        elif angle < 360:
+            x, y = self._get_direction(angle - 180, speed)
+            y, x = y, -x
+
+        return x, y
+
     def rotate(self, angle):
+
+        if self.curr_rotation > 360:
+            self.curr_rotation = self.curr_rotation - 360
+        elif self.curr_rotation < 0:
+            self.curr_rotation = 350 - self.curr_rotation
+
         self.curr_rotation = self.angle = angle + self.curr_rotation
+
         self.image = pygame.transform.rotate(self.image_orig, self.angle)
 
         x, y = self.rect.center
@@ -157,12 +197,13 @@ class RoomObject:
         self.rect.x = self.x
         self.rect.y = self.y
 
-    def rotate_to_coordinate(self, x, y):
 
-        distance_x = self.x + (self.width / 2) - x
-        distance_y = self.y + (self.height / 2) - y
+    def rotate_to_coordinate(self, mouseX, mouseY):
 
-        angle = math.degrees(math.atan2(distance_x, distance_y))
+        distanceX = self.x + (self.width / 2) - mouseX
+        distanceY = self.y + (self.height / 2) - mouseY
+
+        angle = math.degrees(math.atan2(distanceX, distanceY))
 
         self.curr_rotation = 0
 

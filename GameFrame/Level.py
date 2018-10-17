@@ -5,7 +5,7 @@ from GameFrame.Globals import Globals
 
 class Level:
 
-    def __init__(self, screen):
+    def __init__(self, screen, joysticks):
         self.screen = screen
         self.objects = []
         self.keyboard_objects = []
@@ -19,6 +19,17 @@ class Level:
         self.background_scroll_speed = 0
         self.background_scrolling = False
         self.user_events = []
+        self.joysticks = joysticks
+        self.p1_btns = []
+        self.p2_btns = []
+        if len(self.joysticks) > 0:
+            buttons = self.joysticks[0].get_numbuttons()
+            for i in range(buttons):
+                self.p1_btns.append(self.joysticks[0].get_button(i))
+            if len(self.joysticks) > 1:
+                buttons = self.joysticks[1].get_numbuttons()
+                for i in range(buttons):
+                    self.p2_btns.append(self.joysticks[1].get_button(i))
 
     def run(self):
         self.running = True
@@ -49,10 +60,25 @@ class Level:
                         if obj.rect.collidepoint(mouse_pos):
                             obj.clicked(event.button)
 
+            # -  Check for joystick events and pass  - #
+            # - to objects registered for key events - #
+            signals = False
+            for i in range(len(self.p1_btns)):
+                self.p1_btns[i] = self.joysticks[0].get_button(i)
+                if self.p1_btns[i] == 1:
+                    signals = True
+            for i in range(len(self.p2_btns)):
+                self.p2_btns[i] = self.joysticks[1].get_button(i)
+                if self.p2_btns[i] == 1:
+                    signals = True
+            if signals:
+                for obj in self.keyboard_objects:
+                    obj.joy_pad_signal(self.p1_btns, self.p2_btns)
+
             # - Check for a keyboard event and pass - #
             # - to objects registered for key events - #
             keys = pygame.key.get_pressed()
-            if len(keys) > 0:
+            if len(keys):
                 for obj in self.keyboard_objects:
                     obj.key_pressed(keys)
 

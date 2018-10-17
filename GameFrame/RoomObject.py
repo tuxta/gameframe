@@ -2,8 +2,8 @@ import math
 import os
 import pygame
 
-class RoomObject:
 
+class RoomObject:
     def __init__(self, room, x, y):
         self.room = room
         self.depth = 0
@@ -23,7 +23,6 @@ class RoomObject:
         self.handle_key_events = False
         self.handle_mouse_events = False
         self.angle = 0
-
 
         self.collision_object_types = set()
         self.collision_objects = []
@@ -79,6 +78,9 @@ class RoomObject:
         pass
 
     def key_pressed(self, key):
+        pass
+
+    def joy_pad_signal(self, p1_buttons, p2_buttons):
         pass
 
     def clicked(self, button_number):

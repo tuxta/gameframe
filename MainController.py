@@ -8,6 +8,11 @@ pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 pygame.init()
 pygame.font.init()
+pygame.joystick.init()
+
+joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+for joystick in joysticks:
+    joystick.init()
 
 pygame.display.set_caption(Globals.window_name)
 window_size = (Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT)
@@ -26,7 +31,7 @@ while Globals.running:
     mod_name = "Rooms.{}".format(levels[curr_level])
     mod = __import__(mod_name)
     class_name = getattr(mod, levels[curr_level])
-    room = class_name(screen)
+    room = class_name(screen, joysticks)
     exit_val = room.run()
 
     if exit_val is True or Globals.running is False:

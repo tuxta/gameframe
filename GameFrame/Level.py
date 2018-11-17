@@ -172,19 +172,19 @@ class Level:
         pass
 
     def delete_object(self, obj):
-        for index, list_obj in enumerate(self.objects):
+        for index, list_obj in self.enumerate_backwards(self.objects):
             if list_obj is obj:
                 self.objects.pop(index)
             else:
                 list_obj.remove_object(obj)
-        for index, list_obj in enumerate(self.keyboard_objects):
+        for index, list_obj in self.enumerate_backwards(self.keyboard_objects):
             if list_obj is obj:
                 self.keyboard_objects.pop(index)
-        for index, list_obj in enumerate(self.mouse_objects):
+        for index, list_obj in self.enumerate_backwards(self.mouse_objects):
             if list_obj is obj:
                 self.mouse_objects.pop(index)
         # Remove any timed function calls for the deleted object
-        for index, event_method in enumerate(self.user_events):
+        for index, event_method in self.enumerate_backwards(self.user_events):
             obj_inst = event_method[1].__self__
             if obj_inst is obj:
                 self.user_events.pop(index)
@@ -193,8 +193,15 @@ class Level:
         self.user_events.append([ticks, function_call])
 
     def process_user_events(self):
-        for index, user_event in enumerate(self.user_events):
+        for index, user_event in self.enumerate_backwards(self.user_events):
             user_event[0] -= 1
             if user_event[0] <= 0:
                 user_event[1]()
                 self.user_events.pop(index)
+
+    # Iterate backwards over a list, using an index and item iterator
+    def enumerate_backwards(self, object_list):
+        index = len(object_list)
+        for item in reversed(object_list):
+            index -= 1
+            yield index, item

@@ -3,13 +3,12 @@ import sqlite3
 
 
 class DataBaseController:
-    def __init__(self):
-        dbase_file_name = 'GameDatabase'
+    def __init__(self, dbase_file_name):
         app_file_path = os.path.join(os.path.dirname(__file__), dbase_file_name)
         self.app_db = sqlite3.connect(app_file_path)
         self.app_cursor = self.app_db.cursor()
 
-    def close_databases(self):
+    def close(self):
         self.app_db.close()
 
     # ------------------------------ #

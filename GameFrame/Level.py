@@ -114,6 +114,8 @@ class Level:
             for item in self.objects:
                 item.check_collisions()
 
+            self.step()
+
             for item in self.objects:
                 self.screen.blit(item.image, (item.x, item.y))
 

@@ -122,6 +122,9 @@ class Level:
             pygame.display.update()
 
         return self.quitting
+    
+    def step(self):
+        pass
 
     def set_background_image(self, image_file):
         self.background_set = True

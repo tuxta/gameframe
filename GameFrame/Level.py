@@ -22,14 +22,32 @@ class Level:
         self.joysticks = joysticks
         self.p1_btns = []
         self.p2_btns = []
+        self.has_buttons_1 = False
+        self.has_buttons_2 = False
+        self.has_hat_1 = False
+        self.has_hat_2 = False
         if len(self.joysticks) > 0:
             buttons = self.joysticks[0].get_numbuttons()
+            if buttons > 0:
+                self.has_buttons_1 = True
             for i in range(buttons):
                 self.p1_btns.append(self.joysticks[0].get_button(i))
+            axes = self.joysticks[0].get_numaxes()
+            if axes > 0:
+                self.has_hat_1 = True
+            for i in range(axes):
+                self.p1_btns.append(self.joysticks[0].get_axis(i))
             if len(self.joysticks) > 1:
                 buttons = self.joysticks[1].get_numbuttons()
+                if buttons > 0:
+                    self.has_buttons_2 = True
                 for i in range(buttons):
                     self.p2_btns.append(self.joysticks[1].get_button(i))
+                axes = self.joysticks[1].get_numaxes()
+                if axes > 0:
+                    self.has_hat_2 = True
+                for i in range(axes):
+                    self.p1_btns.append(self.joysticks[1].get_axis(i))
 
     def run(self):
         self.running = True
@@ -63,14 +81,27 @@ class Level:
             # -  Check for joystick events and pass  - #
             # - to objects registered for key events - #
             signals = False
-            for i in range(len(self.p1_btns)):
-                self.p1_btns[i] = self.joysticks[0].get_button(i)
-                if self.p1_btns[i] == 1:
-                    signals = True
-            for i in range(len(self.p2_btns)):
-                self.p2_btns[i] = self.joysticks[1].get_button(i)
-                if self.p2_btns[i] == 1:
-                    signals = True
+            if self.has_buttons_1:
+                for i in range(self.joysticks[0].get_numbuttons()):
+                    self.p1_btns[i] = self.joysticks[0].get_button(i)
+                    if self.p1_btns[i] == 1:
+                        signals = True
+            if self.has_hat_1:
+                for i in range(self.joysticks[0].get_numaxes()):
+                    self.p1_btns[-(i+1)] = self.joysticks[0].get_axis(i)
+                    if self.p1_btns[-(i+1)] > 0 or self.p1_btns[-(i+1)] < 0:
+                        signals = True
+            if self.has_buttons_2:
+                for i in range(self.joysticks[1].get_numbuttons()):
+                    self.p2_btns[i] = self.joysticks[1].get_button(i)
+                    if self.p2_btns[i] == 1:
+                        signals = True
+            if self.has_hat_2:
+                for i in range(self.joysticks[1].get_numaxes()):
+                    self.p1_btns[-i] = self.joysticks[1].get_axis(i)
+                    if self.p2_btns[-i] > 0 or self.p2_btns[-i] < 0:
+                        signals = True
+
             if signals:
                 for obj in self.keyboard_objects:
                     obj.joy_pad_signal(self.p1_btns, self.p2_btns)
@@ -114,17 +145,12 @@ class Level:
             for item in self.objects:
                 item.check_collisions()
 
-            self.step()
-
             for item in self.objects:
                 self.screen.blit(item.image, (item.x, item.y))
 
             pygame.display.update()
 
         return self.quitting
-    
-    def step(self):
-        pass
 
     def set_background_image(self, image_file):
         self.background_set = True
@@ -201,8 +227,8 @@ class Level:
         for index, user_event in self.enumerate_backwards(self.user_events):
             user_event[0] -= 1
             if user_event[0] <= 0:
-                self.user_events.pop(index)
                 user_event[1]()
+                self.user_events.pop(index)
 
     # Iterate backwards over a list, using an index and item iterator
     def enumerate_backwards(self, object_list):

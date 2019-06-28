@@ -1,11 +1,10 @@
-from GameFrame import TextObject, Globals
 import pygame
+from GameFrame import TextObject, Globals, Level
 
 
 class EntryTextObject(TextObject):
-    def __init__(self, room, x, y, max_len=4):
+    def __init__(self, room: Level, x: int, y: int, max_len=4):
         TextObject.__init__(self, room, x, y, '')
-
         self.max_len = max_len
         self.handle_key_events = True
         self.accepting_input = True
@@ -14,7 +13,7 @@ class EntryTextObject(TextObject):
     def accept_input(self):
         self.accepting_input = True
 
-    def set_focus(self, in_focus):
+    def set_focus(self, in_focus: bool):
         self.active = in_focus
 
     def key_pressed(self, key):

@@ -1,11 +1,17 @@
 import os
 import pygame
+from typing import List
+from pygame import Surface
+from typing import Callable
+from pygame.mixer import Sound
+from pygame.joystick import Joystick
 from GameFrame.Globals import Globals
+from GameFrame.RoomObject import RoomObject
 
 
 class Level:
 
-    def __init__(self, screen, joysticks):
+    def __init__(self, screen: Surface, joysticks: Joystick):
         self.screen = screen
         self.objects = []
         self.keyboard_objects = []
@@ -49,7 +55,7 @@ class Level:
                 for i in range(axes):
                     self.p1_btns.append(self.joysticks[1].get_axis(i))
 
-    def run(self):
+    def run(self) -> bool:
         self.running = True
         for obj in self.objects:
             self.init_collision_list(obj)
@@ -152,15 +158,15 @@ class Level:
 
         return self.quitting
 
-    def set_background_image(self, image_file):
+    def set_background_image(self, image_file: str):
         self.background_set = True
         self.background_image = pygame.image.load(os.path.join('Images', image_file)).convert_alpha()
 
-    def set_background_scroll(self, speed):
+    def set_background_scroll(self, speed: int):
         self.background_scrolling = True
         self.background_scroll_speed = speed
 
-    def add_room_object(self, room_object):
+    def add_room_object(self, room_object: RoomObject):
         # - Add to room objects list - #
         if len(self.objects) == 0:
             self.objects.append(room_object)
@@ -185,14 +191,14 @@ class Level:
             for obj in self.objects:
                 self.init_collision_list(obj)
 
-    def load_sound(self, sound_file):
+    def load_sound(self, sound_file: str) -> Sound:
         fq_filename = os.path.join('Sounds', sound_file)
         return pygame.mixer.Sound(fq_filename)
 
-    def load_image(self, file_name):
+    def load_image(self, file_name: str) -> str:
         return os.path.join('Images', file_name)
 
-    def init_collision_list(self, room_object):
+    def init_collision_list(self, room_object: RoomObject):
         # - Initialise collision list for object - #
         for obj_name in room_object.collision_object_types:
             for obj_instance in self.objects:
@@ -202,7 +208,7 @@ class Level:
     def catch_events(self, events):
         pass
 
-    def delete_object(self, obj):
+    def delete_object(self, obj: RoomObject):
         for index, list_obj in self.enumerate_backwards(self.objects):
             if list_obj is obj:
                 self.objects.pop(index)
@@ -220,7 +226,7 @@ class Level:
             if obj_inst is obj:
                 self.user_events.pop(index)
 
-    def set_timer(self, ticks, function_call):
+    def set_timer(self, ticks: int, function_call: Callable):
         self.user_events.append([ticks, function_call])
 
     def process_user_events(self):
@@ -231,7 +237,7 @@ class Level:
                 self.user_events.pop(index)
 
     # Iterate backwards over a list, using an index and item iterator
-    def enumerate_backwards(self, object_list):
+    def enumerate_backwards(self, object_list: List):
         index = len(object_list)
         for item in reversed(object_list):
             index -= 1

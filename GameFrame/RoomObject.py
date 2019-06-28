@@ -1,10 +1,12 @@
-import math
 import os
+import math
 import pygame
+from GameFrame.Level import Level
+from typing import List, Tuple, Callable
 
 
 class RoomObject:
-    def __init__(self, room, x, y):
+    def __init__(self, room: Level, x: int, y: int):
         self.room = room
         self.depth = 0
         self.x = x
@@ -25,12 +27,13 @@ class RoomObject:
         self.angle = 0
 
         self.collision_object_types = set()
-        self.collision_objects = []
+        self.collision_objects = List[RoomObject]
 
-    def load_image(self, file_name):
+    @staticmethod
+    def load_image(file_name: str) -> str:
         return os.path.join('Images', file_name)
 
-    def set_image(self, image, width, height):
+    def set_image(self, image: str, width: int, height: int):
         self.image_orig = pygame.image.load(image).convert_alpha()
         self.image_orig = pygame.transform.scale(self.image_orig, (width, height))
         self.width = width
@@ -38,7 +41,7 @@ class RoomObject:
         self.image = self.image_orig.copy()
         self.rect = pygame.Rect(self.x, self.y, width, height)
 
-    def register_collision_object(self, collision_object):
+    def register_collision_object(self, collision_object: 'RoomObject'):
         self.collision_object_types.add(collision_object)
 
     def update(self):
@@ -48,10 +51,10 @@ class RoomObject:
         self.rect.x = self.x
         self.rect.y = self.y
 
-    def delete_object(self, obj):
+    def delete_object(self, obj: 'RoomObject'):
         self.room.delete_object(obj)
 
-    def remove_object(self, obj):
+    def remove_object(self, obj: 'RoomObject'):
         for index, list_obj in enumerate(self.collision_objects):
             if list_obj is obj:
                 self.collision_objects.pop(index)
@@ -80,7 +83,7 @@ class RoomObject:
     def key_pressed(self, key):
         pass
 
-    def joy_pad_signal(self, p1_buttons, p2_buttons):
+    def joy_pad_signal(self, p1_buttons: List[int], p2_buttons: List[int]):
         pass
 
     def clicked(self, button_number):
@@ -108,10 +111,10 @@ class RoomObject:
         self.x_speed = 0
         self.y_speed = 0
 
-    def set_timer(self, ticks, function_call):
+    def set_timer(self, ticks: int, function_call: Callable):
         self.room.set_timer(ticks, function_call)
 
-    def set_direction(self, angle, speed):
+    def set_direction(self, angle: int, speed: int):
         if angle < 0:
             pass
         elif angle == 0:
@@ -138,15 +141,16 @@ class RoomObject:
             self.x_speed, self.y_speed = self._get_direction(angle - 270, speed)
             self.x_speed, self.y_speed = self.y_speed, -self.x_speed
 
-    def _get_direction(self, angle, speed):
+    @staticmethod
+    def _get_direction(angle: int, speed: int):
         # Use Trigonometry to calculate x_speed and y_speed values
         new_x_speed = math.cos(math.radians(angle)) * speed
         new_y_speed = math.sin(math.radians(angle)) * speed
 
         return round(new_x_speed), round(new_y_speed)
 
-    def get_direction_coordinates(self, angle, speed):
-
+    def get_direction_coordinates(self, angle: int, speed: int) -> Tuple[int, int]:
+        x, y = 0, 0
         angle += 90
         if angle >= 360:
             angle = angle - 360
@@ -178,7 +182,7 @@ class RoomObject:
 
         return x, y
 
-    def rotate(self, angle):
+    def rotate(self, angle: int):
 
         if self.curr_rotation > 360:
             self.curr_rotation = self.curr_rotation - 360
@@ -199,14 +203,11 @@ class RoomObject:
         self.rect.x = self.x
         self.rect.y = self.y
 
+    def rotate_to_coordinate(self, mouse_x: int, mouse_y: int):
+        distance_x = self.x + (self.width / 2) - mouse_x
+        distance_y = self.y + (self.height / 2) - mouse_y
 
-    def rotate_to_coordinate(self, mouseX, mouseY):
-
-        distanceX = self.x + (self.width / 2) - mouseX
-        distanceY = self.y + (self.height / 2) - mouseY
-
-        angle = math.degrees(math.atan2(distanceX, distanceY))
+        angle = math.degrees(math.atan2(distance_x, distance_y))
 
         self.curr_rotation = 0
-
-        self.rotate(angle)
+        self.rotate(int(angle))

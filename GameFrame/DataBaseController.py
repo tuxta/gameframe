@@ -3,7 +3,7 @@ import sqlite3
 
 
 class DataBaseController:
-    def __init__(self, dbase_file_name):
+    def __init__(self, dbase_file_name: str):
         app_file_path = os.path.join(os.path.dirname(__file__), dbase_file_name)
         self.app_db = sqlite3.connect(app_file_path)
         self.app_cursor = self.app_db.cursor()
@@ -26,4 +26,3 @@ class DataBaseController:
         )
         return self.app_cursor.fetchone()[0]
 '''
-

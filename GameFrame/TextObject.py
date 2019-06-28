@@ -1,9 +1,10 @@
 import pygame
-from GameFrame import RoomObject
+from GameFrame import RoomObject, Level
 
 
 class TextObject(RoomObject):
-    def __init__(self, room, x, y, text='Not Set', size=60, font='Comic Sans MS', colour=(0, 0, 0), bold=False):
+    def __init__(self, room: Level, x: int, y: int, text='Not Set', size=60,
+                 font='Comic Sans MS', colour=(0, 0, 0), bold=False):
         RoomObject.__init__(self, room, x, y)
 
         self.rendered_text = 0

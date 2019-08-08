@@ -1,7 +1,7 @@
 import os
 import math
 import pygame
-from GameFrame.Level import Level
+from GameFrame import Level
 from typing import List, Tuple, Callable
 
 
@@ -27,7 +27,7 @@ class RoomObject:
         self.angle = 0
 
         self.collision_object_types = set()
-        self.collision_objects = List[RoomObject]
+        self.collision_objects = []
 
     @staticmethod
     def load_image(file_name: str) -> str:

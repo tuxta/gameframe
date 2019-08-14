@@ -41,7 +41,7 @@ class RoomObject:
         self.image = self.image_orig.copy()
         self.rect = pygame.Rect(self.x, self.y, width, height)
 
-    def register_collision_object(self, collision_object: 'RoomObject'):
+    def register_collision_object(self, collision_object: str):
         self.collision_object_types.add(collision_object)
 
     def update(self):

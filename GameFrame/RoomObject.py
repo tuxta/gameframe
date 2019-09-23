@@ -65,7 +65,8 @@ class RoomObject:
     def check_collisions(self):
         for item in self.collision_objects:
             if self.rect.colliderect(item.rect):
-                self.handle_collision(item)
+                item_type = type(item).__name__
+                self.handle_collision(item, item_type)
 
     def collides_at(self, obj, x, y, collision_type):
         check_rect = obj.rect.move(x, y)
@@ -77,7 +78,7 @@ class RoomObject:
                     break
         return collision_found
 
-    def handle_collision(self, other):
+    def handle_collision(self, other, other_type):
         pass
 
     def key_pressed(self, key):

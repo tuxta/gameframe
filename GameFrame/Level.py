@@ -139,7 +139,7 @@ class Level:
                     if self.background_y >= Globals.SCREEN_HEIGHT:
                         self.background_y = 0
                     self.screen.blit(self.background_image, (0, self.background_y))
-                    self.screen.blit(self.background_image, (0, self.background_y - 600))
+                    self.screen.blit(self.background_image, (0, self.background_y - Globals.SCREEN_HEIGHT))
                 else:
                     self.screen.blit(self.background_image, (0, 0))
             # Call Update on all objects

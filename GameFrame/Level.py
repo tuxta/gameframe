@@ -233,8 +233,9 @@ class Level:
         for index, user_event in self.enumerate_backwards(self.user_events):
             user_event[0] -= 1
             if user_event[0] <= 0:
-                user_event[1]()
+                event = user_event[1]
                 self.user_events.pop(index)
+                event()
 
     # Iterate backwards over a list, using an index and item iterator
     def enumerate_backwards(self, object_list: List):

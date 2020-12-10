@@ -188,8 +188,7 @@ class Level:
             self.mouse_objects.append(room_object)
 
         if self.running:
-            for obj in self.objects:
-                self.init_collision_list(obj)
+            self.init_collision_list(obj)
 
     def load_sound(self, sound_file: str) -> Sound:
         fq_filename = os.path.join('Sounds', sound_file)
